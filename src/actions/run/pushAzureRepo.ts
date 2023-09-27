@@ -96,19 +96,19 @@ export const pushAzureRepoAction = (options: {
       );
 
       const host = server ?? "dev.azure.com";
-      const integrationConfig = integrations.azure.byHost(host);
+      const integrationConfigToken = integrations.azure.byHost(host).config.credentials[0].kind
 
-      if (!integrationConfig) {
+      if (!integrationConfigToken) {
         throw new InputError(
           `No matching integration configuration for host ${host}, please check your integrations config`
         );
       }
 
-      if (!integrationConfig.config.token && !ctx.input.token) {
+      if (!integrationConfigToken && !ctx.input.token) {
         throw new InputError(`No token provided for Azure Integration ${host}`);
       }
 
-      const token = ctx.input.token ?? integrationConfig.config.token!;
+      const token = ctx.input.token ?? integrationConfigToken!;
 
       const gitAuthorInfo = {
         name: gitAuthorName

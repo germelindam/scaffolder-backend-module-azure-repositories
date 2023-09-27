@@ -91,15 +91,15 @@ export const pullRequestAzureRepoAction = (options: {
       const targetBranch = `refs/heads/${ctx.input.targetBranch}` ?? `refs/heads/main`;
 
       const host = server ?? "dev.azure.com";
-      const integrationConfig = integrations.azure.byHost(host);
+      const integrationConfigToken = integrations.azure.byHost(host).config.credentials[0].kind
 
-      if (!integrationConfig) {
+      if (!integrationConfigToken) {
         throw new InputError(
           `No matching integration configuration for host ${host}, please check your integrations config`
         );
       }
 
-      if (!integrationConfig.config.token && !ctx.input.token) {
+      if (!integrationConfigToken && !ctx.input.token) {
         throw new InputError(`No token provided for Azure Integration ${host}`);
       }
 
@@ -110,7 +110,7 @@ export const pullRequestAzureRepoAction = (options: {
       } as GitInterfaces.GitPullRequest;
 
       const org = ctx.input.organization ?? 'notempty';
-      const token = ctx.input.token ?? integrationConfig.config.token!;
+      const token = ctx.input.token ?? integrationConfigToken!;
 
       await createADOPullRequest({
         gitPullRequestToCreate: pullRequest,
