@@ -4,6 +4,10 @@
   "compilerOptions": {
     "outDir": "dist-types",
     "rootDir": ".",
-    "useUnknownInCatchVariables": false
-  }
+    "useUnknownInCatchVariables": false,
+    "emitDeclarationOnly": false,
+    "declaration": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+  },
 }

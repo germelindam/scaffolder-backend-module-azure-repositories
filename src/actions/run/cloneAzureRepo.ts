@@ -17,7 +17,7 @@
 import { resolveSafeChildPath } from "@backstage/backend-common";
 import { InputError } from "@backstage/errors";
 import { ScmIntegrationRegistry } from "@backstage/integration";
-import { createTemplateAction } from "@backstage/plugin-scaffolder-backend";
+import { createTemplateAction } from "@backstage/plugin-scaffolder-node";
 
 import { cloneRepo } from "../helpers";
 
