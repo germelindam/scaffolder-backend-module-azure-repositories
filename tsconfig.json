@@ -9,5 +9,6 @@
     "declaration": false,
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
+    "noImplicitAny": false
   },
 }

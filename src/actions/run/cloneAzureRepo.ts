@@ -76,19 +76,24 @@ export const cloneAzureRepoAction = (options: {
       const outputDir = resolveSafeChildPath(ctx.workspacePath, targetPath);
 
       const host = server ?? "dev.azure.com";
-      const integrationConfigToken = integrations.azure.byHost(host).config.credentials[0].kind
+      const credentials = integrations.azure.byHost(host).config.credentials;
+      const hasCredentials = credentials.length > 0;
 
-      if (!integrationConfigToken) {
+      if (!hasCredentials) {
         throw new InputError(
           `No matching integration configuration for host ${host}, please check your integrations config`
         );
       }
 
-      if (!integrationConfigToken && !ctx.input.token) {
+      const credentialType = credentials[0].kind;
+      const isPATType = credentialType === 'PersonalAccessToken';
+      const credentialKind = isPATType ? credentialType.split('').map((v, i) => (i === 0 ? v.toLowerCase() : v)).join('') : credentialType;
+      const configToken = isPATType ? credentials[0][credentialKind] : credentials[0];
+      if (!configToken && !ctx.input.token) {
         throw new InputError(`No token provided for Azure Integration ${host}`);
       }
 
-      const token = ctx.input.token ?? integrationConfigToken!;
+      const token = ctx.input.token ?? configToken!;
 
       await cloneRepo({
         dir: outputDir,
